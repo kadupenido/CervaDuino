@@ -15,7 +15,11 @@ export function initSocket(srv: Server) {
 }
 
 function listen() {
-  socket.on("toggleLED", (val) => {
+  socket.on("toggleLED", val => {
     BoardController.toggleLED(val);
   });
+}
+
+export function emit(val: number) {
+  socket.emit("temp", val + "°C");
 }
