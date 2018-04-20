@@ -42,7 +42,7 @@ export const EquipamentoSchema: Schema = new Schema({
   bk: TankSchema
 });
 
-EquipamentoSchema.pre("save", function(next) {
+EquipamentoSchema.pre("save", function (next) {
   const doc = <IEquipamentoModel>this;
 
   doc.hlt.capacidade = calcCapacidade(doc.hlt.diametro, doc.hlt.altura);
@@ -57,8 +57,4 @@ function calcCapacidade(diametro: number, altura: number): number {
   return Math.round(Math.PI * raio * raio * (altura / 1000) * 100) / 100;
 }
 
-export const Equipamento: Model<IEquipamentoModel> = model<IEquipamentoModel>(
-  "Equipamento",
-  EquipamentoSchema,
-  "equipamento"
-);
+export const Equipamento: Model<IEquipamentoModel> = model<IEquipamentoModel>("Equipamento", EquipamentoSchema, "equipamento");
