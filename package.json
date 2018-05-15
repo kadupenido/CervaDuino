@@ -1,44 +1,38 @@
 {
   "name": "cervaduino",
   "version": "1.0.0",
-  "description": "Controlador de brassagens com microcontroladores",
+  "description": "Controlador de brassagens com arduino",
+  "main": "server.js",
   "scripts": {
-    "lint": "tslint 'src/**/*.ts'",
-    "build": "gulp scripts",
-    "start": "nodemon dist/server.js",
-    "serve": "npm run build & npm start"
+    "start": "nodemon ./src/server.js"
   },
-  "author": "Kadu Penido",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kadupenido/CervaDuino.git"
+  },
+  "keywords": [
+    "brewery",
+    "arduino",
+    "cerveja",
+    "brassagens"
+  ],
+  "author": "Carlos Eduardo C. Penido",
   "license": "ISC",
-  "devDependencies": {
-    "@types/body-parser": "^1.16.8",
-    "@types/compression": "0.0.36",
-    "@types/cors": "^2.8.3",
-    "@types/debug": "0.0.30",
-    "@types/express": "^4.11.1",
-    "@types/johnny-five": "0.0.36",
-    "@types/mongoose": "^5.0.10",
-    "@types/morgan": "^1.7.35",
-    "@types/node": "^9.6.5",
-    "@types/socket.io": "^1.4.33",
-    "compression": "^1.7.2",
-    "cors": "^2.8.4",
-    "eslint": "^4.19.1",
-    "eslint-config-airbnb-base": "^12.1.0",
-    "eslint-plugin-import": "^2.11.0",
-    "express-bearer-token": "^2.1.1",
-    "gulp": "^3.9.1",
-    "gulp-typescript": "^4.0.2",
-    "typescript": "^2.8.1"
+  "bugs": {
+    "url": "https://github.com/kadupenido/CervaDuino/issues"
   },
+  "homepage": "https://github.com/kadupenido/CervaDuino#readme",
   "dependencies": {
     "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
     "debug": "^3.1.0",
     "express": "^4.16.3",
     "johnny-five": "^0.14.3",
     "mongoose": "^5.0.15",
     "morgan": "^1.9.0",
-    "socket.io": "^2.1.0",
-    "temporal": "^0.6.0"
+    "socket.io": "^2.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.4"
   }
 }
