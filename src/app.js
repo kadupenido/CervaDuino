@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // Carrega o mongoose
-mongoose.connect(config.database);
+// mongoose.connect(config.database);
 
 // Carrega as rotas
 const mainRoute = require('./app-router');

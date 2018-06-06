@@ -1,4 +1,4 @@
-const board = require('./board');
+// const board = require('./board');
 
 function init(server) {
     this.io = require('socket.io').listen(server);
