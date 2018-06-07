@@ -24,8 +24,10 @@ app.use(bodyParser.json());
 // Carrega as rotas
 const mainRoute = require('./app-router');
 const equipamentoRoute = require('./equipamento/equipamento-route');
+const boardRoute = require('./board/board-route');
 
 app.use('/', mainRoute);
 app.use('/equipamento', equipamentoRoute);
+app.use('/board', boardRoute);
 
 module.exports = app;

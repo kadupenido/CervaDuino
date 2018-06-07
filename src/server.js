@@ -1,7 +1,7 @@
 const app = require('../src/app');
 const http = require('http');
 const debug = require('debug')('cervaduino');
-const socket = require('./socket');
+// const socket = require('./socket');
 
 const port = normalizePort(process.env.PORT || '3000');
 
@@ -13,7 +13,7 @@ server.listen(port);
 server.on('error', (err) => onError(err, port));
 server.on('listening', () => onListening(server));
 
-socket.init(server);
+// socket.init(server);
 
 function normalizePort(val) {
     var port = parseInt(val, 10);
