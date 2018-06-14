@@ -26,7 +26,6 @@ let _pinResistenciaBk = 6;
 
 board.on("ready", boardReady);
 board.on("fail", boardFail);
-board.on("exit", boardExit);
 
 function boardReady() {
     initTempCircuito();
@@ -49,29 +48,6 @@ function boardReady() {
 
 function boardFail(e) {
     _isReady = false;
-}
-
-function boardExit() {
-    _data = {
-        hlt: {
-            setPoint: 0,
-            resistencia: false,
-            potencia: 0,
-        },
-        mlt: {
-            setPoint: 0,
-            resistencia: false,
-            potencia: 0,
-            recirculacao: false,
-        },
-        bk: {
-            resistencia: false,
-            potencia: 0,
-        }
-    };
-
-    refreshData();
-    console.log("Board exit...");
 }
 
 function boardLoop() {
