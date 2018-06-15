@@ -17,12 +17,16 @@ let _relayRecirculacao = {};
 let _relayAux = {};
 
 let _tempHlt = {};
-let _pinResistenciaHlt = 3;
+const _pinResistenciaHlt = 3;
 
 let _tempMlt = {};
-let _pinResistenciaMlt = 5;
+const _pinResistenciaMlt = 5;
 
-let _pinResistenciaBk = 6;
+const _pinResistenciaBk = 6;
+
+const _pinConsumo = 1;
+const _voltage = 127;
+
 
 board.on("ready", boardReady);
 board.on("fail", boardFail);
@@ -39,6 +43,8 @@ function boardReady() {
     initResistenciaMlt();
 
     initResistenciaBk();
+
+    initConsumo();
 
     board.loop(1000, boardLoop);
 
@@ -112,6 +118,35 @@ function initResistenciaBk() {
     board.analogWrite(_pinResistenciaBk, 0);
 }
 
+function initConsumo() {
+
+    const numberOfSamples = 50;
+    let i = 0;
+    let offsetI = 512;
+    let sumI = 0;
+    let filteredI = 0;
+
+    board.pinMode(_pinConsumo, five.Pin.INPUT);
+    board.analogRead(_pinConsumo, function (voltage) {
+        if (i < numberOfSamples) {
+            offsetI = (offsetI + (voltage - offsetI) / 1024);
+            filteredI = voltage - offsetI;
+            sumI += filteredI * filteredI;
+            i++;
+        } else {
+            var iRatio = 16.67 * ((4541 / 1000.0) / (1024));
+            _data.consumo.corrente = iRatio * Math.sqrt(sumI / numberOfSamples);
+            _data.consumo.potencia = _data.consumo.corrente * _voltage;
+            sumI = 0;
+            i = 0;
+        }
+    });
+}
+
+function consumoControl() {
+    _data.consumo.energia += (_data.consumo.potencia / 3600) / 1000;
+}
+
 function hltTempControl() {
 
     let correcao = 0;
@@ -157,10 +192,6 @@ function recirculacaoControl() {
     } else if (!_data.mlt.resistencia) {
         _relayRecirculacao.close();
     }
-}
-
-function consumoControl() {
-
 }
 
 function log() {
