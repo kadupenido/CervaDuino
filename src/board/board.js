@@ -134,8 +134,9 @@ function initConsumo() {
             sumI += filteredI * filteredI;
             i++;
         } else {
-            var iRatio = 16.67 * ((4541 / 1000.0) / (1024));
-            _data.consumo.corrente = iRatio * Math.sqrt(sumI / numberOfSamples);
+            let iRatio = 16.67 * ((4541 / 1000.0) / (1024));
+            let consumo = iRatio * Math.sqrt(sumI / numberOfSamples);
+            _data.consumo.corrente = consumo > 0.045 ? consumo : 0;
             _data.consumo.potencia = _data.consumo.corrente * _voltage;
             sumI = 0;
             i = 0;
