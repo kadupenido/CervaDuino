@@ -37,7 +37,7 @@ function boardReady() {
     initRelayCirculacao();
     initRelayAux();
 
-    initTempHlt();
+    //  initTempHlt();
     initResistenciaHlt();
 
     initResistenciaMlt();

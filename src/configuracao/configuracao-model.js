@@ -19,19 +19,36 @@ const TankSchema = new Schema({
         required: false
     },
     capacidade: {
-        type: Number
+        type: Number,
+        required: true
+    },
+    offsetTemp: {
+        type: Number,
+        required: true
     }
 });
 
-const EquipamentoSchema = new Schema({
+const FermentadorSchema = new Schema({
+    capacidade: {
+        type: Number,
+        required: true
+    },
+    espacoPerdido: {
+        type: Number,
+        required: true
+    }
+})
+
+const ConfiguracaoSchema = new Schema({
     hlt: TankSchema,
     mlt: TankSchema,
-    bk: TankSchema
+    bk: TankSchema,
+    fermentador: FermentadorSchema
 });
 
-const Equipamento = mongoose.model('Equipamento', EquipamentoSchema, 'equipamento');
+const Configuracao = mongoose.model('Equipamento', ConfiguracaoSchema, 'equipamento');
 
-EquipamentoSchema.pre("save", function (next) {
+ConfiguracaoSchema.pre("save", function (next) {
 
     this.hlt.capacidade = calcCapacidade(this.hlt.diametro, this.hlt.altura);
     this.mlt.capacidade = calcCapacidade(this.mlt.diametro, this.mlt.altura);
@@ -46,4 +63,4 @@ function calcCapacidade(diametro, altura) {
 }
 
 
-module.exports = Equipamento;
+module.exports = Configuracao;

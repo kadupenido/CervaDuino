@@ -19,15 +19,15 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // Carrega o mongoose
-// mongoose.connect(config.database);
+mongoose.connect(config.database);
 
 // Carrega as rotas
 const mainRoute = require('./app-router');
-const equipamentoRoute = require('./equipamento/equipamento-route');
+const configuracaoRoute = require('./configuracao/configuracao-route');
 const boardRoute = require('./board/board-route');
 
 app.use('/', mainRoute);
-app.use('/equipamento', equipamentoRoute);
+app.use('/configuracao', configuracaoRoute);
 app.use('/board', boardRoute);
 
 module.exports = app;
