@@ -46,7 +46,7 @@ const ConfiguracaoSchema = new Schema({
     fermentador: FermentadorSchema
 });
 
-const Configuracao = mongoose.model('Equipamento', ConfiguracaoSchema, 'equipamento');
+const Configuracao = mongoose.model('Configuracao', ConfiguracaoSchema, 'configuracao');
 
 ConfiguracaoSchema.pre("save", function (next) {
 

@@ -20,6 +20,9 @@ module.exports.salvarConfiguracao = async (req, res, next) => {
         }
         else {
             config = new Configuracao(req.body);
+            config.hlt.capacidade = calcCapacidade(config.hlt.diametro, config.hlt.altura);
+            config.mlt.capacidade = calcCapacidade(config.mlt.diametro, config.mlt.altura);
+            config.bk.capacidade = calcCapacidade(config.bk.diametro, config.bk.altura);
         }
         config = await config.save();
         res.status(200).send(config);
@@ -29,4 +32,9 @@ module.exports.salvarConfiguracao = async (req, res, next) => {
             message: err.message || err
         });
     }
+}
+
+function calcCapacidade(diametro, altura) {
+    const raio = diametro / 2;
+    return Math.round(Math.PI * raio * raio * (altura / 1000) * 100) / 100;
 }
