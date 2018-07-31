@@ -3,7 +3,7 @@ const router = express.Router();
 const ReceitasController = require('./receitas-controller');
 
 router.get("/", ReceitasController.obterReceitas);
-router.post("/", ReceitasController.salvarReceita);
-router.put("/:id", ReceitasController.salvarReceita);
+router.get("/:id", ReceitasController.obterReceita);
+router.post("/:id", ReceitasController.salvarReceita);
 
 module.exports = router;
