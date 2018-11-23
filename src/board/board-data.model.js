@@ -11,6 +11,7 @@ const dataModel = {
         recirculacao: false,
     },
     bk: {
+        temperatura: 0,
         resistencia: false,
         potencia: 0,
     },

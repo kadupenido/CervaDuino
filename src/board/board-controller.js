@@ -1,4 +1,4 @@
-// const board = require('./board');
+const board = require('./board');
 
 module.exports.isReady = async (req, res, next) => {
     res.status(200).send({ isReady: board.isReady() });

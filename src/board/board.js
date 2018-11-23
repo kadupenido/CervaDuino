@@ -37,11 +37,13 @@ function boardReady() {
     initRelayCirculacao();
     initRelayAux();
 
-    //  initTempHlt();
+    initTempHlt();
     initResistenciaHlt();
 
+    initTempMlt();
     initResistenciaMlt();
 
+    initTempBk();
     initResistenciaBk();
 
     initConsumo();
@@ -85,10 +87,11 @@ function initTempHlt() {
     _tempHlt = new five.Temperature({
         controller: "DS18B20",
         pin: 2,
-        // address: 0x317017290ff
+        address: 0x317251d3aff
     });
     _tempHlt.on("change", function () {
         _data.hlt.temperatura = this.celsius;
+        // console.log("0x" + this.address.toString(16));
     });
 }
 
@@ -96,10 +99,21 @@ function initTempMlt() {
     _tempMlt = new five.Temperature({
         controller: "DS18B20",
         pin: 2,
-        // address: 0x317017290ff
+        address: 0x317017290ff
     });
     _tempMlt.on("change", function () {
         _data.mlt.temperatura = this.celsius;
+    });
+}
+
+function initTempBk() {
+    _tempMlt = new five.Temperature({
+        controller: "DS18B20",
+        pin: 2,
+        address: 0x316010f52ff
+    });
+    _tempMlt.on("change", function () {
+        _data.bk.temperatura = this.celsius;
     });
 }
 
