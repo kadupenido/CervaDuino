@@ -1,11 +1,10 @@
 const five = require("johnny-five");
 const DataModel = require('./board-data.model');
 const PID = require('node-pid-controller');
-var fs = require('fs');
+let _io;
 
 const buzzer = require('./buzzer');
-
-const circuitTemp = require('./circuit-temp');
+const current = require('./current');
 
 const hltTemp = require('./hlt-temp');
 const hltResistence = require('./hlt-resistance');
@@ -19,14 +18,11 @@ const bkResistence = require('./bk-resistance');
 const recirculationRelay = require('./recirculation-relay');
 const auxRelay = require('./aux-relay');
 
-const current = require('./current');
-
 const board = new five.Board({ repl: false });
 
 const _pidHlt = new PID({ k_p: 0.25, k_i: 0.01, k_d: 0, dt: 1 });
 const _pidMlt = new PID({ k_p: 0.25, k_i: 0.01, k_d: 0.01, dt: 1 });
 
-let _isReady = false;
 let _data = DataModel;
 
 board.on("ready", boardReady);
@@ -35,26 +31,24 @@ board.on("fail", boardFail);
 function boardReady() {
 
     buzzer.initialize(board);
+    current.initialize(board, _io);
 
-    circuitTemp.initialize();
-
-    hltTemp.initialize();
+    hltTemp.initialize(_io);
     hltResistence.initialize(board);
 
-    mltTemp.initialize();
+    mltTemp.initialize(_io);
     mltResistence.initialize(board);
 
-    bkTemp.initialize();
+    bkTemp.initialize(_io);
     bkResistence.initialize(board);
 
     recirculationRelay.initialize();
     auxRelay.initialize();
 
-    current.initialize(board);
-
     board.loop(1000, boardLoop);
 
-    _isReady = true;
+    _io.on('connection', ioConnection);
+
     console.log("Board ready...");
 }
 
@@ -116,57 +110,26 @@ function recirculacaoControl() {
     }
 }
 
-function log() {
-    var currentdate = new Date();
-    var hora = currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+function ioConnection(socket) {
+    socket.on('hltSetPoint', function (val) { _data.hlt.setPoint = val; });
+    socket.on('hltResistencia', function (val) { _data.hlt.resistencia = val; });
 
-    var hora1 = "Hora: " + hora;
-    var temp = "Temp: " + Math.round((_data.hlt.temperatura * 10)) / 10;
-    var potencia = "Potencia: " + _data.hlt.potencia;
-    console.log(hora1 + "  " + temp + "  " + potencia);
+    socket.on('mltSetPoint', function (val) { _data.mlt.setPoint = val; });
+    socket.on('mltResistencia', function (val) { _data.mlt.resistencia = val; });
+    socket.on('mltrecirculacao', function (val) { _data.mlt.recirculacao = val; });
 
-    var log = {
-        hora: hora,
-        temp: Math.round((_data.hlt.temperatura * 10)) / 10,
-        potencia: _data.hlt.potencia
-    };
+    socket.on('bkPotencia', function (val) { _data.bk.potencia = val; });
+    socket.on('bkResistencia', function (val) { _data.bk.resistencia = val; });
 
-    fs.appendFile('C:\\Users\\Kadu\\Desktop\\Chart\\registros.json', JSON.stringify(log) + "\r\n", function (err) {
-        if (err) throw err;
+    socket.on('buzzer', function (val) {
+        if (val) {
+            buzzer.play();
+        } else {
+            buzzer.stop();
+        }
     });
 }
 
-module.exports.isReady = () => {
-    return _isReady;
-}
-
-module.exports.getData = () => {
-
-    _data.temperaturaCircuito = circuitTemp.temp();
-
-    _data.hlt.temperatura = hltTemp.temp();
-    _data.mlt.temperatura = mltTemp.temp();
-    _data.bk.temperatura = bkTemp.temp();
-
-    const currentData = current.data();
-
-    _data.consumo.energia = currentData.consumption;
-    _data.consumo.corrente = currentData.current;
-    _data.consumo.potencia = currentData.power;
-
-    return _data;
-}
-
-module.exports.setData = (data) => {
-    if (!data) return;
-
-    _data.hlt.setPoint = data.hlt.setPoint;
-    _data.hlt.resistencia = data.hlt.resistencia;
-
-    _data.mlt.setPoint = data.mlt.setPoint;
-    _data.mlt.resistencia = data.mlt.resistencia;
-    _data.mlt.recirculacao = data.mlt.recirculacao;
-
-    _data.bk.potencia = data.bk.potencia;
-    _data.bk.resistencia = data.bk.resistencia;
-}
+module.exports = function (io) {
+    _io = io;
+};

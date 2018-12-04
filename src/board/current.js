@@ -2,6 +2,7 @@ const five = require("johnny-five");
 const ports = require('./ports');
 
 let _board = {};
+let _io;
 
 const numberOfSamples = 50;
 let i = 0;
@@ -13,16 +14,26 @@ let _current = 0;
 let _power = 0;
 let _consumption = 0;
 
-function initialize(boardI) {
+function initialize(boardI, io) {
 
     _board = boardI;
+    _io = io;
 
     _board.pinMode(ports.current.pin, five.Pin.INPUT);
     _board.analogRead(ports.current.pin, function (voltage) { readCurrent(voltage) });
 
     _board.loop(1000, function () {
         _consumption += (_current / 3600) / 1000;
+        _io.emit('currentData', getData());
     });
+}
+
+function getData() {
+    return {
+        consumption: Math.round(_consumption * 100) / 100,
+        current: Math.round(_current * 100) / 100,
+        power: Math.round(_power),
+    }
 }
 
 function readCurrent(voltage) {
@@ -47,15 +58,6 @@ function readCurrent(voltage) {
     }
 }
 
-function getData() {
-    return {
-        current: _current,
-        power: _power,
-        consumption: _consumption
-    }
-}
-
 module.exports = {
-    initialize: initialize,
-    data: getData
-}
+    initialize: initialize
+};

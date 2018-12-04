@@ -1,8 +1,8 @@
 const five = require("johnny-five");
 const ports = require('./ports');
+const io = require('../socket-io')();
 
 let _circuitTemp = {};
-let _temp = 0;
 
 function initialize() {
 
@@ -12,17 +12,12 @@ function initialize() {
     });
 
     _circuitTemp.on("change", function () {
-        _temp = this.celsius
+        if (io) {
+            io.emit('circuitTemp', Math.round(this.celsius * 10) / 10);
+        }
     });
 
     console.log('Circuit temperature ready...');
 }
 
-function getTemp() {
-    return _temp;
-}
-
-module.exports = {
-    initialize: initialize,
-    temp: getTemp
-}
+module.exports = initialize;

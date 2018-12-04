@@ -21,9 +21,9 @@ module.exports = {
     },
     recirculationRelay: 4,
     auxRelay: 7,
-    hltResistance: 3,
+    hltResistance: 6,
     mltResistance: 5,
-    bkResistance: 6,
+    bkResistance: 3,
     current: {
         pin: 1,
         voltage: 127

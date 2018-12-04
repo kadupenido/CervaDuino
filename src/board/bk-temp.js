@@ -1,10 +1,12 @@
 const five = require("johnny-five");
 const ports = require('./ports');
+let _io;
 
 let _bkTemp = {};
-let _temp = 0;
 
-function initialize() {
+function initialize(io) {
+
+    _io = io;
 
     _bkTemp = new five.Thermometer({
         controller: ports.bkTemp.controller,
@@ -13,17 +15,12 @@ function initialize() {
     });
 
     _bkTemp.on("change", function () {
-        _temp = this.celsius
+        _io.emit('bkTemp', Math.round(this.celsius * 10) / 10);
     });
 
     console.log('BK temperature ready...');
 }
 
-function getTemp() {
-    return _temp;
-}
-
 module.exports = {
-    initialize: initialize,
-    temp: getTemp
-}
+    initialize: initialize
+};

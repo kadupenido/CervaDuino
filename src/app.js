@@ -24,12 +24,10 @@ mongoose.connect(config.database);
 // Carrega as rotas
 const mainRoute = require('./app-router');
 const configuracaoRoute = require('./configuracao/configuracao-route');
-const boardRoute = require('./board/board-route');
 const receitaRoute = require('./receitas/receitas-route');
 
 app.use('/', mainRoute);
 app.use('/configuracao', configuracaoRoute);
-app.use('/board', boardRoute);
 app.use('/receitas', receitaRoute);
 
 module.exports = app;

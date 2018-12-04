@@ -8,6 +8,9 @@ app.set('port', port);
 
 const server = http.createServer(app);
 
+const io = require('./socket-io')(server);
+const board = require('./board/board')(io);
+
 server.listen(port);
 server.on('error', (err) => onError(err, port));
 server.on('listening', () => onListening(server));
