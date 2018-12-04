@@ -26,6 +26,8 @@ function initialize(boardI, io) {
         _consumption += (_current / 3600) / 1000;
         _io.emit('currentData', getData());
     });
+
+    console.log('Current ready...');
 }
 
 function getData() {
