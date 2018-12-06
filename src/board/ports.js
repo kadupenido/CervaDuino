@@ -20,7 +20,7 @@ module.exports = {
         address: 0x316010f52ff
     },
     recirculationRelay: 4,
-    auxRelay: 7,
+    coolingRelay: 7,
     hltResistance: 6,
     mltResistance: 5,
     bkResistance: 3,

@@ -10,6 +10,7 @@ const dataModel = {
     },
     bk: {
         resistencia: false,
+        resfriamento: false,
         potencia: 0,
     }
 };

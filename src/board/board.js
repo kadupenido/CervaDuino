@@ -16,7 +16,7 @@ const bkTemp = require('./bk-temp');
 const bkResistence = require('./bk-resistance');
 
 const recirculationRelay = require('./recirculation-relay');
-const auxRelay = require('./aux-relay');
+const coolingRelay = require('./cooling-relay');
 
 const board = new five.Board({ repl: false });
 
@@ -43,7 +43,7 @@ function boardReady() {
     bkResistence.initialize(board);
 
     recirculationRelay.initialize();
-    auxRelay.initialize();
+    coolingRelay.initialize();
 
     board.loop(1000, boardLoop);
 
@@ -60,7 +60,8 @@ function boardLoop() {
     hltTempControl();
     mltTempControl();
     bkTempControl();
-    recirculacaoControl();
+    recirculationControl();
+    coolingControl();
 }
 
 function hltTempControl() {
@@ -86,9 +87,6 @@ function mltTempControl() {
     if (_data.mlt.resistencia) {
         correcao = _pidMlt.update(mltTemp.temp());
         correcao = correcao < 0 ? 0 : correcao > 255 ? 255 : correcao;
-        recirculationRelay.open();
-    } else {
-        recirculationRelay.close();
     }
 
     mltResistence.power(correcao);
@@ -102,31 +100,69 @@ function bkTempControl() {
     }
 }
 
-function recirculacaoControl() {
+function recirculationControl() {
     if (_data.mlt.recirculacao) {
         recirculationRelay.open();
-    } else if (!_data.mlt.resistencia) {
+    } else {
         recirculationRelay.close();
     }
 }
 
+function coolingControl() {
+    if (_data.bk.resfriamento) {
+        coolingRelay.open();
+    } else {
+        coolingRelay.close();
+    }
+}
+
 function ioConnection(socket) {
-    socket.on('hltSetPoint', function (val) { _data.hlt.setPoint = val; });
-    socket.on('hltResistencia', function (val) { _data.hlt.resistencia = val; });
 
-    socket.on('mltSetPoint', function (val) { _data.mlt.setPoint = val; });
-    socket.on('mltResistencia', function (val) { _data.mlt.resistencia = val; });
-    socket.on('mltrecirculacao', function (val) { _data.mlt.recirculacao = val; });
+    socket.on('hltSetPoint', function (val) {
+        _data.hlt.setPoint = val;
+        console.log('HLT SetPoint: ', val);
+    });
 
-    socket.on('bkPotencia', function (val) { _data.bk.potencia = val; });
-    socket.on('bkResistencia', function (val) { _data.bk.resistencia = val; });
+    socket.on('hltResistencia', function (val) {
+        _data.hlt.resistencia = val;
+        console.log('HLT Resistencia: ', val ? 'ON' : 'OFF');
+    });
+
+    socket.on('mltSetPoint', function (val) {
+        _data.mlt.setPoint = val;
+        console.log('MLT SetPoint: ', val);
+    });
+    socket.on('mltResistencia', function (val) {
+        _data.mlt.resistencia = val;
+        console.log('MLT Resistência: ', val ? 'ON' : 'OFF');
+    });
+    socket.on('mltRecirculacao', function (val) {
+        _data.mlt.recirculacao = val;
+        console.log('MLT Recirculação: ', val ? 'ON' : 'OFF');
+    });
+
+    socket.on('bkPotencia', function (val) {
+        _data.bk.potencia = val;
+        console.log('BK Porência: ', val);
+    });
+    socket.on('bkResistencia', function (val) {
+        _data.bk.resistencia = val;
+        console.log('BK Resistência: ', val ? 'ON' : 'OFF');
+    });
+    socket.on('bkResfriamento', function (val) {
+        _data.bk.resfriamento = val;
+        console.log('BK Resfriamento: ', val ? 'ON' : 'OFF');
+    });
 
     socket.on('buzzer', function (val) {
         if (val) {
             buzzer.play();
+
         } else {
             buzzer.stop();
         }
+
+        console.log('Buzzer: ', val ? 'ON' : 'OFF');
     });
 }
 
