@@ -7,7 +7,7 @@ function initialize(boardI) {
     board.pinMode(ports.bkResistance, five.Pin.PWM);
     board.analogWrite(ports.bkResistance, 0);
 
-    console.log('BK Resistance ready...');
+    console.log('BK resistance ready...');
 }
 
 function setPower(power) {

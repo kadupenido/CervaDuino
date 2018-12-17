@@ -1,14 +1,17 @@
 {
   "name": "cervaduino",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Controlador de brassagens com arduino",
   "main": "server.js",
   "scripts": {
-    "start": "node ./src/server.js"
+    "start": "node app.js"
   },
+  "authors": [
+    "Kadu Penido @kadupenido"
+  ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kadupenido/CervaDuino.git"
+    "url": "https://github.com/kadupenido/CervaDuino"
   },
   "keywords": [
     "brewery",
@@ -28,9 +31,9 @@
     "debug": "^3.1.0",
     "express": "^4.16.3",
     "johnny-five": "^0.15.0",
+    "liquid-pid": "^1.0.0",
     "mongoose": "^5.0.15",
     "morgan": "^1.9.0",
-    "node-pid-controller": "^1.0.1",
     "socket.io": "^2.2.0"
   },
   "devDependencies": {

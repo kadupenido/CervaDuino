@@ -23,7 +23,7 @@ function initialize(boardI, io) {
     _board.analogRead(ports.current.pin, function (voltage) { readCurrent(voltage) });
 
     _board.loop(1000, function () {
-        _consumption += (_current / 3600) / 1000;
+        _consumption += (_power / 3600) / 1000;
         _io.emit('currentData', getData());
     });
 
@@ -50,9 +50,7 @@ function readCurrent(voltage) {
     } else {
 
         let iRatio = 16.67 * ((4541 / 1000.0) / (1024));
-        let current = iRatio * Math.sqrt(sumI / numberOfSamples);
-
-        _current = current > 0.045 ? current : 0;
+        _current = iRatio * Math.sqrt(sumI / numberOfSamples);
         _power = _current * ports.current.voltage;
 
         sumI = 0;

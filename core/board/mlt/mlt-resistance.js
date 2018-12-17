@@ -4,14 +4,14 @@ const ports = require('./ports');
 function initialize(boardI) {
     board = boardI;
 
-    board.pinMode(ports.hltResistance, five.Pin.PWM);
-    board.analogWrite(ports.hltResistance, 0);
+    board.pinMode(ports.mltResistance, five.Pin.PWM);
+    board.analogWrite(ports.mltResistance, 0);
 
-    console.log('HLT Resistance ready...');
+    console.log('MLT resistance ready...');
 }
 
 function setPower(power) {
-    board.analogWrite(ports.hltResistance, power);
+    board.analogWrite(ports.mltResistance, power);
 }
 
 module.exports = {
