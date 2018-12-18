@@ -34,7 +34,6 @@ mongoose.connect(config.mongo.connect);
 /**
  * Router
  */
-
 {
     const mainRoute = require('./src/app-router');
     const configuracaoRoute = require('./src/configuracao/configuracao-route');
@@ -53,10 +52,20 @@ server.listen(config.port, function() {
 /**
  * socket.io
  */
-
 {
     const io = require('socket.io')(server);
 
     Socket.init(io);
 }
 
+/*
+ * Core
+ */
+{
+    let core = require('./core');
+  
+    Socket.setCoreEmitter(core.emitter);
+  
+    core.init();
+  }
+  
