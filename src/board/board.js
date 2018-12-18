@@ -21,8 +21,8 @@ const coolingRelay = require('./cooling-relay');
 
 const board = new five.Board({ repl: false });
 
-const _pidHlt = new liquidPID({ Pmax: 255 });
-const _pidMlt = new liquidPID({ Pmax: 255 });
+const pidMlt = new liquidPID({ Pmax: 255 });
+const pidMlt = new liquidPID({ Pmax: 255 });
 
 let _data = DataModel;
 
@@ -69,10 +69,10 @@ function hltTempControl() {
 
     let correcao = 0;
 
-    _pidHlt.setPoint(_data.hlt.setPoint);
+    pidHlt.setPoint(_data.hlt.setPoint);
 
     if (_data.hlt.resistencia) {
-        correcao = _nPidHlt.calculate(hltTemp.temp());
+        correcao = pidHlt.calculate(hltTemp.temp());
         console.log(`HLT -> SETPOINT: ${_data.hlt.setPoint} - TEMP: ${hltTemp.temp()} - P: ${correcao}`);
     }
 
@@ -83,10 +83,10 @@ function mltTempControl() {
 
     let correcao = 0;
 
-    _nPidMlt.setPoint(_data.mlt.setPoint)
+    pidMlt.setPoint(_data.mlt.setPoint)
 
     if (_data.mlt.resistencia) {
-        correcao = _nPidMlt.calculate(mltTemp.temp());
+        correcao = pidMlt.calculate(mltTemp.temp());
         console.log(`MLT -> SETPOINT: ${_data.mlt.setPoint} - TEMP: ${mltTemp.temp()} - P: ${correcao}`);
     }
 
