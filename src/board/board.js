@@ -21,8 +21,8 @@ const coolingRelay = require('./cooling-relay');
 
 const board = new five.Board({ repl: false });
 
-const _nPidHlt = new liquidPID({ Pmax: 255 });
-const _nPidMlt = new liquidPID({ Pmax: 255 });
+const pidMlt = new liquidPID({ Pmax: 255 });
+const pidMlt = new liquidPID({ Pmax: 255 });
 
 let _data = DataModel;
 
@@ -69,10 +69,10 @@ function hltTempControl() {
 
     let correcao = 0;
 
-    _nPidHlt.setPoint(_data.hlt.setPoint);
+    pidHlt.setPoint(_data.hlt.setPoint);
 
     if (_data.hlt.resistencia) {
-        correcao = _nPidHlt.calculate(hltTemp.temp());
+        correcao = pidHlt.calculate(hltTemp.temp());
         console.log(`HLT -> SETPOINT: ${_data.hlt.setPoint} - TEMP: ${hltTemp.temp()} - P: ${correcao}`);
     }
 
@@ -83,10 +83,10 @@ function mltTempControl() {
 
     let correcao = 0;
 
-    _nPidMlt.setPoint(_data.mlt.setPoint)
+    pidMlt.setPoint(_data.mlt.setPoint)
 
     if (_data.mlt.resistencia) {
-        correcao = _nPidMlt.calculate(mltTemp.temp());
+        correcao = pidMlt.calculate(mltTemp.temp());
         console.log(`MLT -> SETPOINT: ${_data.mlt.setPoint} - TEMP: ${mltTemp.temp()} - P: ${correcao}`);
     }
 
@@ -121,38 +121,38 @@ function ioConnection(socket) {
 
     socket.on('hltSetPoint', function (val) {
         _data.hlt.setPoint = val;
-        console.log('HLT SetPoint: ', val);
+        console.log('HLT setpoint: ', val);
     });
 
     socket.on('hltResistencia', function (val) {
         _data.hlt.resistencia = val;
-        console.log('HLT Resistencia: ', val ? 'ON' : 'OFF');
+        console.log('HLT resistência: ', val ? 'ON' : 'OFF');
     });
 
     socket.on('mltSetPoint', function (val) {
         _data.mlt.setPoint = val;
-        console.log('MLT SetPoint: ', val);
+        console.log('MLT setpoint: ', val);
     });
     socket.on('mltResistencia', function (val) {
         _data.mlt.resistencia = val;
-        console.log('MLT Resistência: ', val ? 'ON' : 'OFF');
+        console.log('MLT resistência: ', val ? 'ON' : 'OFF');
     });
     socket.on('mltRecirculacao', function (val) {
         _data.mlt.recirculacao = val;
-        console.log('MLT Recirculação: ', val ? 'ON' : 'OFF');
+        console.log('MLT recirculação: ', val ? 'ON' : 'OFF');
     });
 
     socket.on('bkPotencia', function (val) {
         _data.bk.potencia = val;
-        console.log('BK Porência: ', val);
+        console.log('BK potência: ', val);
     });
     socket.on('bkResistencia', function (val) {
         _data.bk.resistencia = val;
-        console.log('BK Resistência: ', val ? 'ON' : 'OFF');
+        console.log('BK resistência: ', val ? 'ON' : 'OFF');
     });
     socket.on('bkResfriamento', function (val) {
         _data.bk.resfriamento = val;
-        console.log('BK Resfriamento: ', val ? 'ON' : 'OFF');
+        console.log('BK resfriamento: ', val ? 'ON' : 'OFF');
     });
 
     socket.on('buzzer', function (val) {
