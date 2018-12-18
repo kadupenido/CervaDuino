@@ -1,6 +1,7 @@
 const five = require("johnny-five");
 const DataModel = require('./board-data.model');
 const PID = require('liquid-pid');
+const liquidPID = require('liquid-pid');
 let _io;
 
 const buzzer = require('./buzzer');
@@ -71,7 +72,8 @@ function hltTempControl() {
     _pidHlt.setPoint(_data.hlt.setPoint);
 
     if (_data.hlt.resistencia) {
-        correcao = _pidHlt.calculate(hltTemp.temp());
+        correcao = _nPidHlt.calculate(hltTemp.temp());
+        console.log(`HLT -> SETPOINT: ${_data.hlt.setPoint} - TEMP: ${hltTemp.temp()} - P: ${correcao}`);
     }
 
     hltResistence.power(correcao);
@@ -81,10 +83,11 @@ function mltTempControl() {
 
     let correcao = 0;
 
-    _pidMlt.setPoint(_data.mlt.setPoint);
+    _nPidMlt.setPoint(_data.mlt.setPoint)
 
     if (_data.mlt.resistencia) {
-        correcao = _pidMlt.calculate(mltTemp.temp());
+        correcao = _nPidMlt.calculate(mltTemp.temp());
+        console.log(`MLT -> SETPOINT: ${_data.mlt.setPoint} - TEMP: ${mltTemp.temp()} - P: ${correcao}`);
     }
 
     mltResistence.power(correcao);
