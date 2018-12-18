@@ -1,6 +1,7 @@
 const five = require("johnny-five");
 const DataModel = require('./board-data.model');
 const PID = require('node-pid-controller');
+const liquidPID = require('liquid-pid');
 let _io;
 
 const buzzer = require('./buzzer');
@@ -20,8 +21,8 @@ const coolingRelay = require('./cooling-relay');
 
 const board = new five.Board({ repl: false });
 
-const _pidHlt = new PID({ k_p: 0.25, k_i: 0.01, k_d: 0, dt: 1 });
-const _pidMlt = new PID({ k_p: 0.25, k_i: 0.01, k_d: 0.01, dt: 1 });
+const _nPidHlt = new liquidPID({ Pmax: 255 });
+const _nPidMlt = new liquidPID({ Pmax: 255 });
 
 let _data = DataModel;
 
@@ -68,11 +69,11 @@ function hltTempControl() {
 
     let correcao = 0;
 
-    _pidHlt.setTarget(_data.hlt.setPoint);
+    _nPidHlt.setPoint(_data.hlt.setPoint);
 
     if (_data.hlt.resistencia) {
-        correcao = _pidHlt.update(hltTemp.temp());
-        correcao = correcao < 0 ? 0 : correcao > 255 ? 255 : correcao;
+        correcao = _nPidHlt.calculate(hltTemp.temp());
+        console.log(`HLT -> SETPOINT: ${_data.hlt.setPoint} - TEMP: ${hltTemp.temp()} - P: ${correcao}`);
     }
 
     hltResistence.power(correcao);
@@ -82,11 +83,11 @@ function mltTempControl() {
 
     let correcao = 0;
 
-    _pidMlt.setTarget(_data.mlt.setPoint);
+    _nPidMlt.setPoint(_data.mlt.setPoint)
 
     if (_data.mlt.resistencia) {
-        correcao = _pidMlt.update(mltTemp.temp());
-        correcao = correcao < 0 ? 0 : correcao > 255 ? 255 : correcao;
+        correcao = _nPidMlt.calculate(mltTemp.temp());
+        console.log(`MLT -> SETPOINT: ${_data.mlt.setPoint} - TEMP: ${mltTemp.temp()} - P: ${correcao}`);
     }
 
     mltResistence.power(correcao);

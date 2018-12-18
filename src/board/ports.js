@@ -7,12 +7,12 @@ module.exports = {
     hltTemp: {
         controller: "DS18B20",
         pin: 2,
-        address: 0x317251d3aff
+        address: 0x317017290ff
     },
     mltTemp: {
         controller: "DS18B20",
         pin: 2,
-        address: 0x317017290ff
+        address: 0x317251d3aff
     },
     bkTemp: {
         controller: "DS18B20",
@@ -26,6 +26,6 @@ module.exports = {
     bkResistance: 3,
     current: {
         pin: 1,
-        voltage: 127
+        voltage: 220
     }
 }

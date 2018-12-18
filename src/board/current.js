@@ -23,7 +23,7 @@ function initialize(boardI, io) {
     _board.analogRead(ports.current.pin, function (voltage) { readCurrent(voltage) });
 
     _board.loop(1000, function () {
-        _consumption += (_current / 3600) / 1000;
+        _consumption += (_power / 3600) / 1000;
         _io.emit('currentData', getData());
     });
 
