@@ -1,6 +1,5 @@
 const five = require("johnny-five");
 const DataModel = require('./board-data.model');
-const PID = require('node-pid-controller');
 const liquidPID = require('liquid-pid');
 let _io;
 
@@ -21,7 +20,7 @@ const coolingRelay = require('./cooling-relay');
 
 const board = new five.Board({ repl: false });
 
-const pidMlt = new liquidPID({ Pmax: 255 });
+const pidHlt = new liquidPID({ Pmax: 255 });
 const pidMlt = new liquidPID({ Pmax: 255 });
 
 let _data = DataModel;
